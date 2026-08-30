@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Công cụ tính Chu kỳ Chuyển đổi Tiền mặt (CCC) — FinPulse</title>
+<style>
+:root{
+  --ink: #10192B;
+  --ink-2: #16213A;
+  --ink-3: #1D2A47;
+  --paper: #F6F3EA;
+  --brass: #C9A227;
+  --brass-soft: rgba(201,162,39,0.16);
+  --teal: #3E9C82;
+  --amber: #D9A441;
+  --brick: #C1573A;
+  --text: #EDE8DA;
+  --text-muted: #9AA7BE;
+  --hair: rgba(237,232,218,0.12);
+  --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--text);font-family:var(--sans);}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 500px at 15% -10%, rgba(201,162,39,0.10), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, rgba(62,156,130,0.08), transparent 55%),
+    var(--ink);
+}
+a{color:inherit;}
+
+/* --- nav --- */
+.nav{
+  max-width:960px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 20px;
+  border-bottom:1px solid var(--hair);
+}
+.nav .brand{
+  font-family:var(--serif);font-size:19px;letter-spacing:0.01em;
+  text-decoration:none;color:var(--text);
+  display:flex;align-items:center;gap:9px;
+}
+.nav .brand::before{
+  content:'◆';color:var(--brass);font-size:13px;
+}
+.nav .links{display:flex;gap:28px;}
+.nav .links a{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
+  text-decoration:none;color:var(--text-muted);
+  transition:color .15s ease;
+}
+.nav .links a:hover, .nav .links a.active{color:var(--brass);}
+@media (max-width:600px){.nav .links{gap:16px;} .nav .links a{font-size:11px;}}
+
+/* --- shared layout --- */
+.wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+.wrap-narrow{max-width:640px;margin:0 auto;padding:0 20px;}
+
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--brass);display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--brass);display:inline-block;}
+
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.12;margin:0 0 16px;letter-spacing:-0.01em;}
+h1 em{font-style:italic;color:var(--brass);}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,28px);margin:0 0 10px;}
+.lede{font-size:16px;line-height:1.65;color:var(--text-muted);max-width:56ch;}
+
+.card{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;
+  padding:26px;position:relative;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, var(--brass), transparent 70%);
+}
+
+.btn{
+  display:inline-block;background:var(--brass);color:var(--ink);border:none;
+  font-family:var(--sans);font-weight:600;font-size:15px;padding:13px 22px;
+  border-radius:2px;cursor:pointer;text-decoration:none;letter-spacing:0.01em;
+  transition:filter .15s ease;
+}
+.btn:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--hair);}
+.btn-ghost:hover{border-color:var(--brass);filter:none;}
+
+.tag{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;display:inline-block;
+}
+.tag-live{background:rgba(62,156,130,0.18);color:var(--teal);}
+.tag-soon{background:rgba(217,164,65,0.18);color:var(--amber);}
+
+.foot{
+  max-width:960px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--hair);
+  font-size:11.5px;color:var(--text-muted);opacity:0.6;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+
+/* --- section scaffolding --- */
+section{padding:90px 0;}
+.section-inner{max-width:1040px;margin:0 auto;padding:0 20px;}
+.section-eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--brass);margin-bottom:14px;
+}
+.section-title{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.4vw,32px);margin:0 0 14px;line-height:1.25;}
+.section-title em{font-style:italic;color:var(--brass);}
+.section-sub{font-size:15px;color:var(--text-muted);line-height:1.65;max-width:58ch;margin-bottom:44px;}
+
+/* --- hero --- */
+.hero{padding:80px 0 100px;}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+
+.snapshot{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:3px;padding:26px;position:relative;
+}
+.snapshot::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brass),transparent 70%);}
+.snapshot-label{font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:18px;}
+.metric-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--hair);}
+.metric-row:last-of-type{border-bottom:none;}
+.metric-row .m-label{font-size:13px;color:var(--text-muted);}
+.metric-row .m-val{font-family:var(--mono);font-size:15px;color:var(--text);}
+.metric-row .m-val.warn{color:var(--amber);}
+.metric-row .m-val.bad{color:var(--brick);}
+.metric-row .m-val.good{color:var(--teal);}
+
+.score-block{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:20px;border-top:1px solid var(--hair);}
+.score-block .sc-label{font-size:12px;color:var(--text-muted);}
+.score-block .sc-num{font-family:var(--mono);font-size:34px;color:var(--amber);}
+.score-block .sc-num span{font-size:14px;color:var(--text-muted);}
+
+/* --- pain grid --- */
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media (max-width:700px){.pain-grid{grid-template-columns:1fr;}}
+.pain-card{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:22px;}
+.pain-card .q{font-family:var(--serif);font-size:16px;color:var(--text);margin-bottom:8px;line-height:1.4;}
+.pain-card .a{font-size:13.5px;color:var(--text-muted);line-height:1.6;}
+
+/* --- product cards --- */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media (max-width:800px){.product-grid{grid-template-columns:1fr;}}
+.product-card{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:26px;display:flex;flex-direction:column;text-decoration:none;color:inherit;position:relative;}
+.product-card.featured{border-color:var(--brass);}
+.product-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--brass);}
+.product-card .p-name{font-family:var(--serif);font-size:19px;color:var(--text);margin:14px 0 8px;}
+.product-card .p-price{font-family:var(--mono);font-size:13px;color:var(--brass);margin-bottom:14px;}
+.product-card .p-desc{font-size:13px;color:var(--text-muted);line-height:1.6;flex:1;}
+.product-card .p-cta{font-family:var(--mono);font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--brass);margin-top:18px;}
+
+/* --- process --- */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+@media (max-width:800px){.process-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:480px){.process-grid{grid-template-columns:1fr;}}
+.process-step .p-num{font-family:var(--serif);font-size:32px;color:var(--brass);opacity:0.5;margin-bottom:10px;}
+.process-step .p-title{font-family:var(--serif);font-size:16px;color:var(--text);margin-bottom:8px;}
+.process-step .p-desc{font-size:13px;color:var(--text-muted);line-height:1.6;}
+
+/* --- trust --- */
+.trust-box{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:36px;}
+.trust-stats{display:flex;gap:40px;margin-top:24px;flex-wrap:wrap;}
+.trust-stats .stat-num{font-family:var(--serif);font-size:28px;color:var(--brass);}
+.trust-stats .stat-label{font-size:11.5px;color:var(--text-muted);letter-spacing:0.04em;}
+
+/* --- cta section --- */
+.cta-section{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:3px;padding:50px;text-align:center;
+}
+.cta-section h2{margin-bottom:14px;}
+
+</style>
+<style>
+  .field-label{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--text-muted);
+    text-transform:uppercase;display:block;margin-bottom:6px;
+  }
+  .field{margin-bottom:18px;}
+  .field:last-child{margin-bottom:0;}
+  .field-hint{font-size:12px;color:var(--text-muted);opacity:0.75;margin-top:5px;}
+
+  input[type=number]{
+    width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);
+    font-family:var(--mono);font-size:16px;padding:11px 13px;border-radius:2px;outline:none;
+    transition:border-color .15s ease;
+  }
+  input[type=number]:focus{border-color:var(--brass);}
+  input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+
+  select{
+    width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);
+    font-family:var(--sans);font-size:15px;padding:11px 13px;border-radius:2px;outline:none;
+    appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239AA7BE'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;
+  }
+  select:focus{border-color:var(--brass);}
+
+  .source-note{font-size:11px;color:var(--text-muted);opacity:0.7;margin-top:16px;line-height:1.5;padding-top:14px;border-top:1px solid var(--hair);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media (max-width:480px){.grid2{grid-template-columns:1fr;}}
+
+  .tool-btn{width:100%;text-align:center;margin-top:6px;}
+  .err{color:var(--brick);font-size:12.5px;margin-top:10px;display:none;}
+
+  #gate{display:none;margin-top:22px;}
+  #gate.show{display:block;}
+  .gate-note{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:16px;}
+
+  #result{display:none;margin-top:22px;}
+  #result.show{display:block;}
+
+  .dial-num{font-family:var(--mono);}
+  .dial-num .n{font-size:52px;font-weight:600;line-height:1;color:var(--text);}
+  .dial-num .u{font-size:13px;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:6px;display:block;}
+
+  .verdict{font-family:var(--serif);font-size:18px;line-height:1.5;margin:22px 0 0;padding-top:20px;border-top:1px solid var(--hair);}
+  .verdict .tag{margin-right:10px;vertical-align:middle;}
+
+  .breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair);margin-top:22px;border-radius:2px;overflow:hidden;}
+  .breakdown div{background:var(--ink-2);padding:14px 12px;text-align:center;}
+  .breakdown .k{font-family:var(--mono);font-size:20px;color:var(--text);}
+  .breakdown .l{font-size:10.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-top:4px;}
+
+  .cta-box{margin-top:26px;padding-top:22px;border-top:1px solid var(--hair);font-size:13.5px;color:var(--text-muted);line-height:1.6;}
+  .cta-box a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(201,162,39,0.4);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="brand">FinPulse</a>
+  <div class="links">
+    <a href="/tools/" class="active">Free Tools</a>
+    <a href="/cfo-os/">CFO OS</a>
+    <a href="/store/">Store</a>
+  </div>
+</nav>
+
+<div class="wrap-narrow" style="padding-top:50px;padding-bottom:70px;">
+
+  <div class="eyebrow">CFO OS · Free Tool</div>
+  <h1>Vốn của bạn đang bị <em>khóa</em> bao nhiêu ngày?</h1>
+  <p class="lede" style="margin-bottom:30px;">Chu kỳ Chuyển đổi Tiền mặt (Cash Conversion Cycle) đo số ngày tiền của bạn nằm kẹt giữa lúc chi ra mua hàng và lúc thu về từ khách. Nhập 5 số liệu gần nhất — có ngay con số và mức cảnh báo theo ngành.</p>
+
+  <div class="card" id="inputCard">
+    <div class="field">
+      <label class="field-label">Ngành nghề kinh doanh chính</label>
+      <select id="industry">
+        <option value="retail">Bán lẻ tổng hợp</option>
+        <option value="wholesale">Phân phối / Bán buôn</option>
+        <option value="fmcg">Sản xuất hàng tiêu dùng (FMCG)</option>
+        <option value="industrial">Sản xuất công nghiệp / Cơ khí</option>
+        <option value="construction">Xây dựng / Thầu công trình</option>
+        <option value="fnb">F&amp;B / Nhà hàng</option>
+        <option value="services">Dịch vụ B2B / Tư vấn</option>
+        <option value="ecommerce">Thương mại điện tử / D2C</option>
+      </select>
+      <div class="field-hint">Ngưỡng cảnh báo sẽ tự động điều chỉnh theo ngành bạn chọn</div>
+    </div>
+    <div class="field">
+      <label class="field-label">Giá vốn hàng bán (COGS) — 12 tháng gần nhất</label>
+      <input type="number" id="cogs" placeholder="VD: 12000000000">
+      <div class="field-hint">Đơn vị: VNĐ, không cần dấu phẩy</div>
+    </div>
+    <div class="field">
+      <label class="field-label">Doanh thu thuần — 12 tháng gần nhất</label>
+      <input type="number" id="revenue" placeholder="VD: 18000000000">
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label class="field-label">Tồn kho bình quân</label>
+        <input type="number" id="inv" placeholder="VD: 2500000000">
+      </div>
+      <div class="field">
+        <label class="field-label">Phải thu bình quân (AR)</label>
+        <input type="number" id="ar" placeholder="VD: 1800000000">
+      </div>
+    </div>
+    <div class="field">
+      <label class="field-label">Phải trả bình quân (AP)</label>
+      <input type="number" id="ap" placeholder="VD: 1400000000">
+    </div>
+    <div class="err" id="errMsg">Điền đủ 5 ô, số phải lớn hơn 0.</div>
+    <button class="btn tool-btn" id="calcBtn" onclick="handleCalc()">Tính chu kỳ chuyển đổi tiền mặt</button>
+    <div class="source-note">Ngưỡng cảnh báo tham khảo, xây dựng từ dữ liệu working-capital theo ngành (Damodaran/NYU Stern), điều chỉnh cho bối cảnh thu hồi công nợ tại SME Việt Nam — chưa phải chuẩn ngành chính thức do ngân hàng VN công bố.</div>
+  </div>
+
+  <div class="card" id="gate">
+    <div class="field-label" style="margin-bottom:10px;">Xem kết quả</div>
+    <p class="gate-note">Nhập email hoặc Zalo để nhận kết quả — và nhận thêm 1 công cụ CFO mới mỗi tuần.</p>
+    <div class="field">
+      <input type="text" id="leadContact" placeholder="Email hoặc số Zalo" style="width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);font-family:var(--sans);font-size:15px;padding:11px 13px;border-radius:2px;outline:none;">
+    </div>
+    <button class="btn tool-btn" id="unlockBtn" onclick="handleUnlock()">Xem kết quả</button>
+  </div>
+
+  <div class="card" id="result">
+    <div class="dial-num">
+      <span class="n" id="cccNum">—</span>
+      <span class="u">ngày · Cash Conversion Cycle</span>
+    </div>
+
+    <div class="breakdown">
+      <div><div class="k" id="dioNum">—</div><div class="l">DIO</div></div>
+      <div><div class="k" id="dsoNum">—</div><div class="l">DSO</div></div>
+      <div><div class="k" id="dpoNum">—</div><div class="l">DPO</div></div>
+    </div>
+
+    <p class="verdict" id="verdictText"></p>
+
+    <div class="cta-box">
+      Con số này cho biết vốn bị khóa bao lâu — chưa cho biết khóa <em>ở đâu</em> và cần làm gì trước. Báo cáo CFO OS đầy đủ phân tích root-cause theo từng khoản mục và đưa ra lựa chọn hành động cụ thể.
+      <br><br>
+      <a href="/cfo-os/">Xem CFO OS đầy đủ →</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <span>FinPulse · finpulse.vn</span>
+  <span>Công cụ tham khảo nhanh — không thay thế báo cáo phân tích đầy đủ</span>
+</div>
+
+<script>
+let computed = null;
+
+const INDUSTRY_THRESHOLDS = {
+  retail:       {label:'Bán lẻ tổng hợp',              bands:[20, 40, 70]},
+  wholesale:    {label:'Phân phối / Bán buôn',          bands:[30, 60, 90]},
+  fmcg:         {label:'Sản xuất hàng tiêu dùng (FMCG)',bands:[40, 70, 100]},
+  industrial:   {label:'Sản xuất công nghiệp / Cơ khí', bands:[60, 100, 140]},
+  construction: {label:'Xây dựng / Thầu công trình',    bands:[60, 100, 150]},
+  fnb:          {label:'F&B / Nhà hàng',                bands:[10, 20, 35]},
+  services:     {label:'Dịch vụ B2B / Tư vấn',          bands:[20, 45, 75]},
+  ecommerce:    {label:'Thương mại điện tử / D2C',      bands:[45, 90, 130]},
+};
+
+function handleCalc(){
+  const cogs = parseFloat(document.getElementById('cogs').value);
+  const revenue = parseFloat(document.getElementById('revenue').value);
+  const inv = parseFloat(document.getElementById('inv').value);
+  const ar = parseFloat(document.getElementById('ar').value);
+  const ap = parseFloat(document.getElementById('ap').value);
+
+  const errEl = document.getElementById('errMsg');
+  const vals = [cogs, revenue, inv, ar, ap];
+  if(vals.some(v => isNaN(v) || v <= 0)){
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const dio = (inv / cogs) * 365;
+  const dso = (ar / revenue) * 365;
+  const dpo = (ap / cogs) * 365;
+  const ccc = dio + dso - dpo;
+  const industry = document.getElementById('industry').value;
+
+  computed = {dio, dso, dpo, ccc, industry};
+
+  document.getElementById('gate').classList.add('show');
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('gate').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function handleUnlock(){
+  const contact = document.getElementById('leadContact').value.trim();
+  if(!contact){
+    document.getElementById('leadContact').style.borderColor = '#C1573A';
+    return;
+  }
+
+  // --- LEAD CAPTURE HOOK ---
+  // Thay URL bên dưới bằng webhook n8n/Zapier thật để đẩy lead vào Sheet/CRM.
+  // fetch('https://YOUR-N8N-WEBHOOK-URL', {
+  //   method: 'POST',
+  //   headers: {'Content-Type': 'application/json'},
+  //   body: JSON.stringify({ contact, tool: 'ccc_calculator', result: computed })
+  // });
+
+  renderResult();
+  document.getElementById('gate').classList.remove('show');
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function renderResult(){
+  const {dio, dso, dpo, ccc, industry} = computed;
+  document.getElementById('cccNum').textContent = Math.round(ccc);
+  document.getElementById('dioNum').textContent = Math.round(dio);
+  document.getElementById('dsoNum').textContent = Math.round(dso);
+  document.getElementById('dpoNum').textContent = Math.round(dpo);
+
+  const ref = INDUSTRY_THRESHOLDS[industry] || INDUSTRY_THRESHOLDS.retail;
+  const [good, normal, watch] = ref.bands;
+
+  let tagClass, tagLabel, msg;
+  if(ccc < good){
+    tagClass = 'tag-live'; tagLabel = 'Tốt';
+    msg = `So với mức tham khảo cho ${ref.label.toLowerCase()} (~${good} ngày), vốn của bạn quay vòng nhanh hơn phần lớn doanh nghiệp cùng ngành.`;
+  } else if(ccc < normal){
+    tagClass = 'tag-live'; tagLabel = 'Ổn';
+    msg = `Ở mức bình thường cho ${ref.label.toLowerCase()} — vẫn còn dư địa để rút ngắn trước khi thành áp lực thật sự.`;
+  } else if(ccc < watch){
+    tagClass = 'tag-soon'; tagLabel = 'Cần chú ý';
+    msg = `Cao hơn mức tham khảo của ${ref.label.toLowerCase()} — nếu doanh thu tăng tiếp, áp lực vốn lưu động sẽ tăng nhanh hơn lợi nhuận.`;
+  } else {
+    tagClass = 'tag-soon'; tagLabel = 'Áp lực cao';
+    msg = `Vượt xa mức tham khảo của ${ref.label.toLowerCase()} (~${watch} ngày) — doanh nghiệp đang tự tài trợ cho khách hàng và nhà cung cấp bằng vốn của chính mình.`;
+  }
+
+  document.getElementById('verdictText').innerHTML =
+    `<span class="tag ${tagClass}">${tagLabel}</span>${msg}`;
+}
+</script>
+</body>
+</html>

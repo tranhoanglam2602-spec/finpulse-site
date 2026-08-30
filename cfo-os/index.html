@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFO OS — FinPulse</title>
+<style>
+:root{
+  --ink: #10192B;
+  --ink-2: #16213A;
+  --ink-3: #1D2A47;
+  --paper: #F6F3EA;
+  --brass: #C9A227;
+  --brass-soft: rgba(201,162,39,0.16);
+  --teal: #3E9C82;
+  --amber: #D9A441;
+  --brick: #C1573A;
+  --text: #EDE8DA;
+  --text-muted: #9AA7BE;
+  --hair: rgba(237,232,218,0.12);
+  --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--text);font-family:var(--sans);}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 500px at 15% -10%, rgba(201,162,39,0.10), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, rgba(62,156,130,0.08), transparent 55%),
+    var(--ink);
+}
+a{color:inherit;}
+
+/* --- nav --- */
+.nav{
+  max-width:960px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 20px;
+  border-bottom:1px solid var(--hair);
+}
+.nav .brand{
+  font-family:var(--serif);font-size:19px;letter-spacing:0.01em;
+  text-decoration:none;color:var(--text);
+  display:flex;align-items:center;gap:9px;
+}
+.nav .brand::before{
+  content:'◆';color:var(--brass);font-size:13px;
+}
+.nav .links{display:flex;gap:28px;}
+.nav .links a{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
+  text-decoration:none;color:var(--text-muted);
+  transition:color .15s ease;
+}
+.nav .links a:hover, .nav .links a.active{color:var(--brass);}
+@media (max-width:600px){.nav .links{gap:16px;} .nav .links a{font-size:11px;}}
+
+/* --- shared layout --- */
+.wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+.wrap-narrow{max-width:640px;margin:0 auto;padding:0 20px;}
+
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--brass);display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--brass);display:inline-block;}
+
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.12;margin:0 0 16px;letter-spacing:-0.01em;}
+h1 em{font-style:italic;color:var(--brass);}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,28px);margin:0 0 10px;}
+.lede{font-size:16px;line-height:1.65;color:var(--text-muted);max-width:56ch;}
+
+.card{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;
+  padding:26px;position:relative;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, var(--brass), transparent 70%);
+}
+
+.btn{
+  display:inline-block;background:var(--brass);color:var(--ink);border:none;
+  font-family:var(--sans);font-weight:600;font-size:15px;padding:13px 22px;
+  border-radius:2px;cursor:pointer;text-decoration:none;letter-spacing:0.01em;
+  transition:filter .15s ease;
+}
+.btn:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--hair);}
+.btn-ghost:hover{border-color:var(--brass);filter:none;}
+
+.tag{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;display:inline-block;
+}
+.tag-live{background:rgba(62,156,130,0.18);color:var(--teal);}
+.tag-soon{background:rgba(217,164,65,0.18);color:var(--amber);}
+
+.foot{
+  max-width:960px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--hair);
+  font-size:11.5px;color:var(--text-muted);opacity:0.6;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+
+/* --- section scaffolding --- */
+section{padding:90px 0;}
+.section-inner{max-width:1040px;margin:0 auto;padding:0 20px;}
+.section-eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--brass);margin-bottom:14px;
+}
+.section-title{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.4vw,32px);margin:0 0 14px;line-height:1.25;}
+.section-title em{font-style:italic;color:var(--brass);}
+.section-sub{font-size:15px;color:var(--text-muted);line-height:1.65;max-width:58ch;margin-bottom:44px;}
+
+/* --- hero --- */
+.hero{padding:80px 0 100px;}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+
+.snapshot{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:3px;padding:26px;position:relative;
+}
+.snapshot::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brass),transparent 70%);}
+.snapshot-label{font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:18px;}
+.metric-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--hair);}
+.metric-row:last-of-type{border-bottom:none;}
+.metric-row .m-label{font-size:13px;color:var(--text-muted);}
+.metric-row .m-val{font-family:var(--mono);font-size:15px;color:var(--text);}
+.metric-row .m-val.warn{color:var(--amber);}
+.metric-row .m-val.bad{color:var(--brick);}
+.metric-row .m-val.good{color:var(--teal);}
+
+.score-block{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:20px;border-top:1px solid var(--hair);}
+.score-block .sc-label{font-size:12px;color:var(--text-muted);}
+.score-block .sc-num{font-family:var(--mono);font-size:34px;color:var(--amber);}
+.score-block .sc-num span{font-size:14px;color:var(--text-muted);}
+
+/* --- pain grid --- */
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media (max-width:700px){.pain-grid{grid-template-columns:1fr;}}
+.pain-card{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:22px;}
+.pain-card .q{font-family:var(--serif);font-size:16px;color:var(--text);margin-bottom:8px;line-height:1.4;}
+.pain-card .a{font-size:13.5px;color:var(--text-muted);line-height:1.6;}
+
+/* --- product cards --- */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media (max-width:800px){.product-grid{grid-template-columns:1fr;}}
+.product-card{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:26px;display:flex;flex-direction:column;text-decoration:none;color:inherit;position:relative;}
+.product-card.featured{border-color:var(--brass);}
+.product-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--brass);}
+.product-card .p-name{font-family:var(--serif);font-size:19px;color:var(--text);margin:14px 0 8px;}
+.product-card .p-price{font-family:var(--mono);font-size:13px;color:var(--brass);margin-bottom:14px;}
+.product-card .p-desc{font-size:13px;color:var(--text-muted);line-height:1.6;flex:1;}
+.product-card .p-cta{font-family:var(--mono);font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--brass);margin-top:18px;}
+
+/* --- process --- */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+@media (max-width:800px){.process-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:480px){.process-grid{grid-template-columns:1fr;}}
+.process-step .p-num{font-family:var(--serif);font-size:32px;color:var(--brass);opacity:0.5;margin-bottom:10px;}
+.process-step .p-title{font-family:var(--serif);font-size:16px;color:var(--text);margin-bottom:8px;}
+.process-step .p-desc{font-size:13px;color:var(--text-muted);line-height:1.6;}
+
+/* --- trust --- */
+.trust-box{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:36px;}
+.trust-stats{display:flex;gap:40px;margin-top:24px;flex-wrap:wrap;}
+.trust-stats .stat-num{font-family:var(--serif);font-size:28px;color:var(--brass);}
+.trust-stats .stat-label{font-size:11.5px;color:var(--text-muted);letter-spacing:0.04em;}
+
+/* --- cta section --- */
+.cta-section{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:3px;padding:50px;text-align:center;
+}
+.cta-section h2{margin-bottom:14px;}
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="brand">FinPulse</a>
+  <div class="links">
+    <a href="/tools/">Free Tools</a>
+    <a href="/cfo-os/" class="active">CFO OS</a>
+    <a href="/store/">Store</a>
+  </div>
+</nav>
+
+<div class="wrap-narrow" style="padding-top:60px;padding-bottom:80px;">
+  <div class="tag tag-soon" style="margin-bottom:20px;">Đang nâng cấp — sắp ra mắt</div>
+  <h1>Upload báo cáo tài chính.<br>Nhận <em>chẩn đoán CFO</em> trong vài phút.</h1>
+  <p class="lede">CFO OS phân tích cash flow, working capital, cơ cấu nợ và biên lợi nhuận từ BCTC của bạn, trả về báo cáo 6 phần: Kết luận, 3 Rủi ro lớn nhất, Chi tiết cho Kế toán trưởng, Hành động cần làm, Lựa chọn chiến lược, và Nhận định CFO.</p>
+
+  <div class="card" style="margin-top:30px;">
+    <h2>Đăng ký nhận thông báo ra mắt</h2>
+    <p style="font-size:13.5px;color:var(--text-muted);line-height:1.6;margin:0 0 18px;">Để lại email — bạn sẽ là người đầu tiên biết khi CFO OS mở lại, kèm ưu đãi cho người đăng ký sớm.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <input type="email" id="waitlistEmail" placeholder="Email của bạn" style="flex:1;min-width:200px;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);font-family:var(--sans);font-size:15px;padding:12px 14px;border-radius:2px;outline:none;">
+      <button class="btn" onclick="handleWaitlist()">Đăng ký</button>
+    </div>
+    <div id="waitlistMsg" style="font-size:13px;color:var(--teal);margin-top:12px;display:none;">Đã ghi nhận — hẹn gặp lại khi CFO OS ra mắt.</div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h2 style="font-size:18px;">Trong lúc chờ</h2>
+    <p style="font-size:13.5px;color:var(--text-muted);line-height:1.6;margin:0;">Dùng thử <a href="/tools/" style="color:var(--brass);">5 free tools</a> để tự kiểm tra nhanh từng chỉ số tài chính riêng lẻ — không cần chờ CFO OS ra mắt.</p>
+  </div>
+</div>
+
+<div class="foot">
+  <span>FinPulse · finpulse.vn</span>
+  <span>Sản phẩm phần mềm — không phải dịch vụ tư vấn</span>
+</div>
+
+<script>
+function handleWaitlist(){
+  const email = document.getElementById('waitlistEmail').value.trim();
+  if(!email) return;
+
+  // --- LEAD CAPTURE HOOK ---
+  // Dán webhook n8n/Zapier thật vào đây để đẩy waitlist vào Sheet/CRM.
+  // fetch('https://YOUR-N8N-WEBHOOK-URL', {
+  //   method: 'POST',
+  //   headers: {'Content-Type': 'application/json'},
+  //   body: JSON.stringify({ email, source: 'cfo_os_waitlist' })
+  // });
+
+  document.getElementById('waitlistMsg').style.display = 'block';
+  document.getElementById('waitlistEmail').value = '';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinPulse — AI chẩn đoán tài chính cho SME Việt Nam</title>
+<meta name="description" content="CFO OS — công cụ AI phân tích cash flow, working capital, nợ vay và biên lợi nhuận từ báo cáo tài chính. Tự kiểm tra sức khoẻ tài chính doanh nghiệp trong vài phút.">
+<style>
+:root{
+  --ink: #10192B;
+  --ink-2: #16213A;
+  --ink-3: #1D2A47;
+  --paper: #F6F3EA;
+  --brass: #C9A227;
+  --brass-soft: rgba(201,162,39,0.16);
+  --teal: #3E9C82;
+  --amber: #D9A441;
+  --brick: #C1573A;
+  --text: #EDE8DA;
+  --text-muted: #9AA7BE;
+  --hair: rgba(237,232,218,0.12);
+  --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--text);font-family:var(--sans);}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 500px at 15% -10%, rgba(201,162,39,0.10), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, rgba(62,156,130,0.08), transparent 55%),
+    var(--ink);
+}
+a{color:inherit;}
+
+/* --- nav --- */
+.nav{
+  max-width:960px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 20px;
+  border-bottom:1px solid var(--hair);
+}
+.nav .brand{
+  font-family:var(--serif);font-size:19px;letter-spacing:0.01em;
+  text-decoration:none;color:var(--text);
+  display:flex;align-items:center;gap:9px;
+}
+.nav .brand::before{
+  content:'◆';color:var(--brass);font-size:13px;
+}
+.nav .links{display:flex;gap:28px;}
+.nav .links a{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
+  text-decoration:none;color:var(--text-muted);
+  transition:color .15s ease;
+}
+.nav .links a:hover, .nav .links a.active{color:var(--brass);}
+@media (max-width:600px){.nav .links{gap:16px;} .nav .links a{font-size:11px;}}
+
+/* --- shared layout --- */
+.wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+.wrap-narrow{max-width:640px;margin:0 auto;padding:0 20px;}
+
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--brass);display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--brass);display:inline-block;}
+
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.12;margin:0 0 16px;letter-spacing:-0.01em;}
+h1 em{font-style:italic;color:var(--brass);}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,28px);margin:0 0 10px;}
+.lede{font-size:16px;line-height:1.65;color:var(--text-muted);max-width:56ch;}
+
+.card{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;
+  padding:26px;position:relative;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, var(--brass), transparent 70%);
+}
+
+.btn{
+  display:inline-block;background:var(--brass);color:var(--ink);border:none;
+  font-family:var(--sans);font-weight:600;font-size:15px;padding:13px 22px;
+  border-radius:2px;cursor:pointer;text-decoration:none;letter-spacing:0.01em;
+  transition:filter .15s ease;
+}
+.btn:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--hair);}
+.btn-ghost:hover{border-color:var(--brass);filter:none;}
+
+.tag{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;display:inline-block;
+}
+.tag-live{background:rgba(62,156,130,0.18);color:var(--teal);}
+.tag-soon{background:rgba(217,164,65,0.18);color:var(--amber);}
+
+.foot{
+  max-width:960px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--hair);
+  font-size:11.5px;color:var(--text-muted);opacity:0.6;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+
+/* --- section scaffolding --- */
+section{padding:90px 0;}
+.section-inner{max-width:1040px;margin:0 auto;padding:0 20px;}
+.section-eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--brass);margin-bottom:14px;
+}
+.section-title{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.4vw,32px);margin:0 0 14px;line-height:1.25;}
+.section-title em{font-style:italic;color:var(--brass);}
+.section-sub{font-size:15px;color:var(--text-muted);line-height:1.65;max-width:58ch;margin-bottom:44px;}
+
+/* --- hero --- */
+.hero{padding:80px 0 100px;}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+
+.snapshot{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:3px;padding:26px;position:relative;
+}
+.snapshot::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brass),transparent 70%);}
+.snapshot-label{font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:18px;}
+.metric-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--hair);}
+.metric-row:last-of-type{border-bottom:none;}
+.metric-row .m-label{font-size:13px;color:var(--text-muted);}
+.metric-row .m-val{font-family:var(--mono);font-size:15px;color:var(--text);}
+.metric-row .m-val.warn{color:var(--amber);}
+.metric-row .m-val.bad{color:var(--brick);}
+.metric-row .m-val.good{color:var(--teal);}
+
+.score-block{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:20px;border-top:1px solid var(--hair);}
+.score-block .sc-label{font-size:12px;color:var(--text-muted);}
+.score-block .sc-num{font-family:var(--mono);font-size:34px;color:var(--amber);}
+.score-block .sc-num span{font-size:14px;color:var(--text-muted);}
+
+/* --- pain grid --- */
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media (max-width:700px){.pain-grid{grid-template-columns:1fr;}}
+.pain-card{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:22px;}
+.pain-card .q{font-family:var(--serif);font-size:16px;color:var(--text);margin-bottom:8px;line-height:1.4;}
+.pain-card .a{font-size:13.5px;color:var(--text-muted);line-height:1.6;}
+
+/* --- product cards --- */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media (max-width:800px){.product-grid{grid-template-columns:1fr;}}
+.product-card{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:26px;display:flex;flex-direction:column;text-decoration:none;color:inherit;position:relative;}
+.product-card.featured{border-color:var(--brass);}
+.product-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--brass);}
+.product-card .p-name{font-family:var(--serif);font-size:19px;color:var(--text);margin:14px 0 8px;}
+.product-card .p-price{font-family:var(--mono);font-size:13px;color:var(--brass);margin-bottom:14px;}
+.product-card .p-desc{font-size:13px;color:var(--text-muted);line-height:1.6;flex:1;}
+.product-card .p-cta{font-family:var(--mono);font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--brass);margin-top:18px;}
+
+/* --- process --- */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+@media (max-width:800px){.process-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:480px){.process-grid{grid-template-columns:1fr;}}
+.process-step .p-num{font-family:var(--serif);font-size:32px;color:var(--brass);opacity:0.5;margin-bottom:10px;}
+.process-step .p-title{font-family:var(--serif);font-size:16px;color:var(--text);margin-bottom:8px;}
+.process-step .p-desc{font-size:13px;color:var(--text-muted);line-height:1.6;}
+
+/* --- trust --- */
+.trust-box{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:36px;}
+.trust-stats{display:flex;gap:40px;margin-top:24px;flex-wrap:wrap;}
+.trust-stats .stat-num{font-family:var(--serif);font-size:28px;color:var(--brass);}
+.trust-stats .stat-label{font-size:11.5px;color:var(--text-muted);letter-spacing:0.04em;}
+
+/* --- cta section --- */
+.cta-section{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:3px;padding:50px;text-align:center;
+}
+.cta-section h2{margin-bottom:14px;}
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="brand">FinPulse</a>
+  <div class="links">
+    <a href="#pain">Vấn đề</a>
+    <a href="#products">Sản phẩm</a>
+    <a href="#process">Cách hoạt động</a>
+    <a href="/tools/" style="color:var(--brass);">Thử miễn phí</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="section-inner">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">AI Finance · Việt Nam</div>
+        <h1>Doanh nghiệp của bạn<br>đang thực sự <em>khoẻ</em> đến đâu?</h1>
+        <p class="lede" style="margin-bottom:30px;">CFO OS đọc báo cáo tài chính của bạn bằng framework 5 chiều — Cash · Working Capital · Cost · Debt · Performance — và trả về đúng những rủi ro cần xử lý trước, không phải một đống bảng biểu.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <a href="/tools/" class="btn">Thử công cụ miễn phí</a>
+          <a href="/cfo-os/" class="btn btn-ghost">Xem CFO OS đầy đủ</a>
+        </div>
+      </div>
+
+      <div class="snapshot">
+        <div class="snapshot-label">Financial Health Snapshot — SME điển hình</div>
+        <div class="metric-row"><span class="m-label">Cash Runway</span><span class="m-val bad">23 ngày</span></div>
+        <div class="metric-row"><span class="m-label">Cash Conversion Cycle</span><span class="m-val warn">78 ngày</span></div>
+        <div class="metric-row"><span class="m-label">Working Capital Ratio</span><span class="m-val warn">1.08×</span></div>
+        <div class="metric-row"><span class="m-label">Debt / EBITDA</span><span class="m-val bad">4.2×</span></div>
+        <div class="metric-row"><span class="m-label">Gross Margin Trend</span><span class="m-val good">↑ ổn định</span></div>
+        <div class="score-block">
+          <div>
+            <div class="sc-label">CFO Health Score</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">⚠ Cần chú ý</div>
+          </div>
+          <div class="sc-num">42<span>/100</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section id="pain">
+  <div class="section-inner">
+    <div class="section-eyebrow">Vấn đề thực tế</div>
+    <h2 class="section-title">Những câu hỏi bạn tự hỏi <em>mỗi tháng</em></h2>
+    <p class="section-sub">Không cần chờ báo cáo quý — CFO OS trả lời trực tiếp bằng số của chính bạn.</p>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="q">Doanh thu tốt, sao tiền vẫn không có?</div>
+        <div class="a">Doanh thu và dòng tiền là hai thứ khác nhau — vốn lưu động đang "ăn" tiền mặt của bạn. Kiểm tra bằng <a href="/tools/ccc.html" style="color:var(--brass);">CCC Calculator</a>.</div>
+      </div>
+      <div class="pain-card">
+        <div class="q">Với dòng tiền hiện tại, tôi còn cầm cự được bao lâu?</div>
+        <div class="a">Cash runway là con số đầu tiên cần biết trước khi ra bất kỳ quyết định lớn nào — sắp có trong bộ Free Tools.</div>
+      </div>
+      <div class="pain-card">
+        <div class="q">Tôi có đang vay quá nhiều không?</div>
+        <div class="a">Không có benchmark chung là nguy hiểm — cần nhìn D/E và cơ cấu nợ ngắn/dài hạn cụ thể theo ngành.</div>
+      </div>
+      <div class="pain-card">
+        <div class="q">Rủi ro tài chính lớn nhất của tôi là gì, xử lý cái nào trước?</div>
+        <div class="a">Đây chính là việc CFO OS làm — phân tích BCTC đầy đủ, trả về 3 rủi ro ưu tiên và hành động cụ thể.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-inner">
+    <div class="section-eyebrow">Sản phẩm</div>
+    <h2 class="section-title">Bắt đầu <em>miễn phí</em>, đi sâu khi cần</h2>
+    <p class="section-sub">Ba tầng sản phẩm, đi từ tự kiểm tra nhanh đến phân tích đầy đủ.</p>
+
+    <div class="product-grid">
+      <a href="/tools/" class="product-card">
+        <span class="tag tag-live">Miễn phí</span>
+        <div class="p-name">Free Tools</div>
+        <div class="p-price">0đ</div>
+        <div class="p-desc">5 công cụ tự kiểm tra — mỗi cái cho ra đúng 1 con số quan trọng: cash runway, working capital, áp lực nợ, điểm sức khoẻ tài chính.</div>
+        <div class="p-cta">Thử ngay →</div>
+      </a>
+
+      <a href="/cfo-os/" class="product-card featured">
+        <span class="tag tag-soon">Sắp ra mắt</span>
+        <div class="p-name">CFO OS</div>
+        <div class="p-price">Trả phí / báo cáo</div>
+        <div class="p-desc">Upload BCTC đầy đủ, nhận báo cáo 6 phần: Kết luận, 3 Rủi ro ưu tiên, Chi tiết kế toán trưởng, Hành động, Lựa chọn chiến lược, Nhận định CFO.</div>
+        <div class="p-cta">Đăng ký chờ ra mắt →</div>
+      </a>
+
+      <a href="/store/" class="product-card">
+        <span class="tag tag-soon">Sắp ra mắt</span>
+        <div class="p-name">Finance AI Store</div>
+        <div class="p-price">Từ thấp đến gói</div>
+        <div class="p-desc">Templates, SOP, prompt và workflow tài chính — cho Finance Manager tự vận hành mà không cần chờ báo cáo.</div>
+        <div class="p-cta">Xem trước →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-inner">
+    <div class="section-eyebrow">Cách hoạt động</div>
+    <h2 class="section-title">Từ BCTC đến <em>hành động</em> — 4 bước</h2>
+    <p class="section-sub">Không cần biết đọc báo cáo tài chính. Không cần chờ vài tuần.</p>
+
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="p-num">01</div>
+        <div class="p-title">Upload BCTC</div>
+        <div class="p-desc">Tải lên báo cáo tài chính — không cần chuẩn hoá trước.</div>
+      </div>
+      <div class="process-step">
+        <div class="p-num">02</div>
+        <div class="p-title">AI Engine phân tích</div>
+        <div class="p-desc">Framework 5 chiều: Cash · Working Capital · Cost · Debt · Performance.</div>
+      </div>
+      <div class="process-step">
+        <div class="p-num">03</div>
+        <div class="p-title">Xác định rủi ro</div>
+        <div class="p-desc">3 điểm rủi ro tài chính ưu tiên cần xử lý ngay — không phải danh sách 20 chỉ số.</div>
+      </div>
+      <div class="process-step">
+        <div class="p-num">04</div>
+        <div class="p-title">Nhận hành động cụ thể</div>
+        <div class="p-desc">Khuyến nghị rõ ràng, khả thi — không lý thuyết, không chung chung.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section>
+  <div class="section-inner">
+    <div class="section-eyebrow">Đứng sau CFO OS</div>
+    <h2 class="section-title">Được xây từ <em>kinh nghiệm thực chiến</em>, không phải template AI</h2>
+
+    <div class="trust-box">
+      <p style="font-size:14.5px;color:var(--text-muted);line-height:1.7;margin:0;max-width:70ch;">
+        Framework phân tích của CFO OS đến từ kinh nghiệm CFO thực tế trong doanh nghiệp Việt Nam — không phải một mô hình AI học từ dữ liệu chung chung. Mỗi ngưỡng cảnh báo, mỗi công thức trong engine đều được kiểm chứng qua các giao dịch huy động vốn, tái cơ cấu nợ và đàm phán ngân hàng thật.
+      </p>
+      <div class="trust-stats">
+        <div><div class="stat-num">18+</div><div class="stat-label">Năm kinh nghiệm tài chính</div></div>
+        <div><div class="stat-num">6</div><div class="stat-label">Ngành đã trực tiếp làm việc</div></div>
+        <div><div class="stat-num">TCB · VCB · Vietinbank</div><div class="stat-label">Giao dịch huy động vốn ngân hàng</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="section-inner">
+    <div class="cta-section">
+      <div class="section-eyebrow" style="justify-content:center;">Bắt đầu ngay</div>
+      <h2>Kiểm tra sức khoẻ tài chính<br>doanh nghiệp của bạn — <em>miễn phí</em></h2>
+      <p style="font-size:14.5px;color:var(--text-muted);margin:0 0 26px;">Mất 2 phút. Không cần upload BCTC.</p>
+      <a href="/tools/" class="btn">Thử Free Tools ngay</a>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <span>FinPulse · finpulse.vn</span>
+  <span>Sản phẩm phần mềm AI — không phải dịch vụ tư vấn</span>
+</div>
+
+</body>
+</html>
