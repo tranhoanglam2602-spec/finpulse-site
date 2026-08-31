@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Công cụ tính Chu kỳ Chuyển đổi Tiền mặt (CCC) — FinPulse</title>
-<meta name="description" content="Tính Chu kỳ Chuyển đổi Tiền mặt (CCC) miễn phí — biết ngay vốn của bạn bị khóa bao nhiêu ngày, theo ngưỡng riêng từng ngành.">
+<title>Financial Health Score — FinPulse</title>
+<meta name="description" content="Chấm điểm sức khoẻ tài chính doanh nghiệp miễn phí — điểm 0-100 từ thanh khoản, đòn bẩy nợ và biên lợi nhuận.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
 <style>
@@ -181,6 +181,7 @@ section{padding:90px 0;}
 
 </style>
 <style>
+
   .field-label{
     font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--text-muted);
     text-transform:uppercase;display:block;margin-bottom:6px;
@@ -197,18 +198,10 @@ section{padding:90px 0;}
   input[type=number]:focus{border-color:var(--brass);}
   input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
 
-  select{
-    width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);
-    font-family:var(--sans);font-size:15px;padding:11px 13px;border-radius:2px;outline:none;
-    appearance:none;-webkit-appearance:none;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239AA7BE'/></svg>");
-    background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;
-  }
-  select:focus{border-color:var(--brass);}
-
-  .source-note{font-size:11px;color:var(--text-muted);opacity:0.7;margin-top:16px;line-height:1.5;padding-top:14px;border-top:1px solid var(--hair);}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   @media (max-width:480px){.grid2{grid-template-columns:1fr;}}
+
+  .source-note{font-size:11px;color:var(--text-muted);opacity:0.7;margin-top:16px;line-height:1.5;padding-top:14px;border-top:1px solid var(--hair);}
 
   .tool-btn{width:100%;text-align:center;margin-top:6px;}
   .err{color:var(--brick);font-size:12.5px;margin-top:10px;display:none;}
@@ -234,6 +227,7 @@ section{padding:90px 0;}
 
   .cta-box{margin-top:26px;padding-top:22px;border-top:1px solid var(--hair);font-size:13.5px;color:var(--text-muted);line-height:1.6;}
   .cta-box a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(201,162,39,0.4);}
+
 </style>
 </head>
 <body>
@@ -249,51 +243,44 @@ section{padding:90px 0;}
 
 <div class="wrap-narrow" style="padding-top:50px;padding-bottom:70px;">
 
-  <div class="eyebrow">FinPulse · Free Tool 01/05</div>
-  <h1>Vốn của bạn đang bị <em>khóa</em> bao nhiêu ngày?</h1>
-  <p class="lede" style="margin-bottom:30px;">Chu kỳ Chuyển đổi Tiền mặt (Cash Conversion Cycle) đo số ngày tiền của bạn nằm kẹt giữa lúc chi ra mua hàng và lúc thu về từ khách. Nhập 5 số liệu gần nhất — có ngay con số và mức cảnh báo theo ngành.</p>
+  <div class="eyebrow">FinPulse · Free Tool 03/05</div>
+  <h1>Sức khoẻ tài chính của bạn<br>đáng <em>bao nhiêu điểm</em>?</h1>
+  <p class="lede" style="margin-bottom:30px;">Tổng hợp nhanh 3 khía cạnh cơ bản — thanh khoản, đòn bẩy nợ, biên lợi nhuận — thành 1 điểm số 0-100. Đây là bản rút gọn tham khảo nhanh, không thay thế phân tích đầy đủ 5 chiều của CFO OS.</p>
 
   <div class="card" id="inputCard">
-    <div class="field">
-      <label class="field-label">Ngành nghề kinh doanh chính</label>
-      <select id="industry">
-        <option value="retail">Bán lẻ tổng hợp</option>
-        <option value="wholesale">Phân phối / Bán buôn</option>
-        <option value="fmcg">Sản xuất hàng tiêu dùng (FMCG)</option>
-        <option value="industrial">Sản xuất công nghiệp / Cơ khí</option>
-        <option value="construction">Xây dựng / Thầu công trình</option>
-        <option value="fnb">F&amp;B / Nhà hàng</option>
-        <option value="services">Dịch vụ B2B / Tư vấn</option>
-        <option value="ecommerce">Thương mại điện tử / D2C</option>
-      </select>
-      <div class="field-hint">Ngưỡng cảnh báo sẽ tự động điều chỉnh theo ngành bạn chọn</div>
-    </div>
-    <div class="field">
-      <label class="field-label">Giá vốn hàng bán (COGS) — 12 tháng gần nhất</label>
-      <input type="number" id="cogs" placeholder="VD: 12000000000">
-      <div class="field-hint">Đơn vị: VNĐ, không cần dấu phẩy</div>
-    </div>
-    <div class="field">
-      <label class="field-label">Doanh thu thuần — 12 tháng gần nhất</label>
-      <input type="number" id="revenue" placeholder="VD: 18000000000">
+    <div class="grid2">
+      <div class="field">
+        <label class="field-label">Tài sản ngắn hạn</label>
+        <input type="number" id="ca" placeholder="VD: 8000000000">
+      </div>
+      <div class="field">
+        <label class="field-label">Nợ ngắn hạn</label>
+        <input type="number" id="cl" placeholder="VD: 5000000000">
+      </div>
     </div>
     <div class="grid2">
       <div class="field">
-        <label class="field-label">Tồn kho bình quân</label>
-        <input type="number" id="inv" placeholder="VD: 2500000000">
+        <label class="field-label">Tổng nợ vay</label>
+        <input type="number" id="debt" placeholder="VD: 6000000000">
       </div>
       <div class="field">
-        <label class="field-label">Phải thu bình quân (AR)</label>
-        <input type="number" id="ar" placeholder="VD: 1800000000">
+        <label class="field-label">Vốn chủ sở hữu</label>
+        <input type="number" id="equity" placeholder="VD: 4000000000">
       </div>
     </div>
-    <div class="field">
-      <label class="field-label">Phải trả bình quân (AP)</label>
-      <input type="number" id="ap" placeholder="VD: 1400000000">
+    <div class="grid2">
+      <div class="field">
+        <label class="field-label">Lợi nhuận ròng (12 tháng)</label>
+        <input type="number" id="np" placeholder="VD: 900000000">
+      </div>
+      <div class="field">
+        <label class="field-label">Doanh thu thuần (12 tháng)</label>
+        <input type="number" id="rev" placeholder="VD: 15000000000">
+      </div>
     </div>
-    <div class="err" id="errMsg">Điền đủ 5 ô, số phải lớn hơn 0.</div>
-    <button class="btn tool-btn" id="calcBtn" onclick="handleCalc()">Tính chu kỳ chuyển đổi tiền mặt</button>
-    <div class="source-note">Ngưỡng cảnh báo tham khảo, xây dựng từ dữ liệu working-capital theo ngành (Damodaran/NYU Stern), điều chỉnh cho bối cảnh thu hồi công nợ tại SME Việt Nam — chưa phải chuẩn ngành chính thức do ngân hàng VN công bố.</div>
+    <div class="err" id="errMsg">Điền đủ các ô, số phải lớn hơn 0.</div>
+    <button class="btn tool-btn" id="calcBtn" onclick="handleCalc()">Tính ngay</button>
+    <div class="source-note">Điểm tổng hợp từ 3 chỉ số theo trọng số bằng nhau: Current Ratio (thanh khoản), Debt/Equity (đòn bẩy), Biên lợi nhuận ròng. Ngưỡng dùng là chuẩn phân tích tài chính phổ biến, mang tính tham khảo — không phải benchmark riêng theo ngành.</div>
   </div>
 
   <div class="card" id="gate">
@@ -307,20 +294,17 @@ section{padding:90px 0;}
 
   <div class="card" id="result">
     <div class="dial-num">
-      <span class="n" id="cccNum">—</span>
-      <span class="u">ngày · Cash Conversion Cycle</span>
+      <span class="n" id="mainNum">—</span>
+      <span class="u" id="mainUnit"></span>
     </div>
-
     <div class="breakdown">
-      <div><div class="k" id="dioNum">—</div><div class="l">DIO</div></div>
-      <div><div class="k" id="dsoNum">—</div><div class="l">DSO</div></div>
-      <div><div class="k" id="dpoNum">—</div><div class="l">DPO</div></div>
+      <div><div class="k" id="crNum">—</div><div class="l">Current Ratio</div></div>
+      <div><div class="k" id="deNum">—</div><div class="l">Debt/Equity</div></div>
+      <div><div class="k" id="nmNum">—</div><div class="l">Net Margin</div></div>
     </div>
-
     <p class="verdict" id="verdictText"></p>
-
     <div class="cta-box">
-      Con số này cho biết vốn bị khóa bao lâu — chưa cho biết khóa <em>ở đâu</em> và cần làm gì trước. Báo cáo CFO OS đầy đủ phân tích root-cause theo từng khoản mục và đưa ra lựa chọn hành động cụ thể.
+      Con số này cho biết hiện trạng — chưa cho biết <em>nguyên nhân</em> và cần làm gì trước. Báo cáo CFO OS đầy đủ phân tích root-cause và đưa ra lựa chọn hành động cụ thể.
       <br><br>
       <a href="/cfo-os/">Xem CFO OS đầy đủ →</a>
     </div>
@@ -336,40 +320,49 @@ section{padding:90px 0;}
 <script>
 let computed = null;
 
-const INDUSTRY_THRESHOLDS = {
-  retail:       {label:'Bán lẻ tổng hợp',              bands:[20, 40, 70]},
-  wholesale:    {label:'Phân phối / Bán buôn',          bands:[30, 60, 90]},
-  fmcg:         {label:'Sản xuất hàng tiêu dùng (FMCG)',bands:[40, 70, 100]},
-  industrial:   {label:'Sản xuất công nghiệp / Cơ khí', bands:[60, 100, 140]},
-  construction: {label:'Xây dựng / Thầu công trình',    bands:[60, 100, 150]},
-  fnb:          {label:'F&B / Nhà hàng',                bands:[10, 20, 35]},
-  services:     {label:'Dịch vụ B2B / Tư vấn',          bands:[20, 45, 75]},
-  ecommerce:    {label:'Thương mại điện tử / D2C',      bands:[45, 90, 130]},
-};
+function scoreCurrentRatio(cr){
+  if(cr >= 2) return 100;
+  if(cr >= 1.5) return 80;
+  if(cr >= 1) return 60;
+  if(cr >= 0.5) return 35;
+  return 10;
+}
+function scoreDE(de){
+  if(de <= 0.5) return 100;
+  if(de <= 1) return 80;
+  if(de <= 2) return 60;
+  if(de <= 3) return 35;
+  return 10;
+}
+function scoreMargin(m){
+  if(m >= 0.15) return 100;
+  if(m >= 0.08) return 80;
+  if(m >= 0.03) return 60;
+  if(m >= 0) return 35;
+  return 10;
+}
 
 function handleCalc(){
-  const cogs = parseFloat(document.getElementById('cogs').value);
-  const revenue = parseFloat(document.getElementById('revenue').value);
-  const inv = parseFloat(document.getElementById('inv').value);
-  const ar = parseFloat(document.getElementById('ar').value);
-  const ap = parseFloat(document.getElementById('ap').value);
+  const ca = parseFloat(document.getElementById('ca').value);
+  const cl = parseFloat(document.getElementById('cl').value);
+  const debt = parseFloat(document.getElementById('debt').value);
+  const equity = parseFloat(document.getElementById('equity').value);
+  const np = parseFloat(document.getElementById('np').value);
+  const rev = parseFloat(document.getElementById('rev').value);
 
+  const vals = [ca, cl, debt, equity, rev];
   const errEl = document.getElementById('errMsg');
-  const vals = [cogs, revenue, inv, ar, ap];
-  if(vals.some(v => isNaN(v) || v <= 0)){
+  if(vals.some(v => isNaN(v) || v <= 0) || isNaN(np)){
     errEl.style.display = 'block';
     return;
   }
   errEl.style.display = 'none';
 
-  const dio = (inv / cogs) * 365;
-  const dso = (ar / revenue) * 365;
-  const dpo = (ap / cogs) * 365;
-  const ccc = dio + dso - dpo;
-  const industry = document.getElementById('industry').value;
+  const currentRatio = ca / cl;
+  const de = debt / equity;
+  const margin = np / rev;
 
-  computed = {dio, dso, dpo, ccc, industry};
-
+  computed = { currentRatio, de, margin };
   document.getElementById('gate').classList.add('show');
   document.getElementById('result').classList.remove('show');
   document.getElementById('gate').scrollIntoView({behavior:'smooth', block:'center'});
@@ -381,14 +374,8 @@ function handleUnlock(){
     document.getElementById('leadContact').style.borderColor = '#C1573A';
     return;
   }
-
   // --- LEAD CAPTURE HOOK ---
-  // Thay URL bên dưới bằng webhook n8n/Zapier thật để đẩy lead vào Sheet/CRM.
-  // fetch('https://YOUR-N8N-WEBHOOK-URL', {
-  //   method: 'POST',
-  //   headers: {'Content-Type': 'application/json'},
-  //   body: JSON.stringify({ contact, tool: 'ccc_calculator', result: computed })
-  // });
+  // fetch('https://YOUR-N8N-WEBHOOK-URL', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ contact, tool:'financial_health_score', result: computed }) });
 
   renderResult();
   document.getElementById('gate').classList.remove('show');
@@ -397,32 +384,27 @@ function handleUnlock(){
 }
 
 function renderResult(){
-  const {dio, dso, dpo, ccc, industry} = computed;
-  document.getElementById('cccNum').textContent = Math.round(ccc);
-  document.getElementById('dioNum').textContent = Math.round(dio);
-  document.getElementById('dsoNum').textContent = Math.round(dso);
-  document.getElementById('dpoNum').textContent = Math.round(dpo);
+  const { currentRatio, de, margin } = computed;
+  document.getElementById('crNum').textContent = currentRatio.toFixed(2) + '×';
+  document.getElementById('deNum').textContent = de.toFixed(2) + '×';
+  document.getElementById('nmNum').textContent = (margin * 100).toFixed(1) + '%';
 
-  const ref = INDUSTRY_THRESHOLDS[industry] || INDUSTRY_THRESHOLDS.retail;
-  const [good, normal, watch] = ref.bands;
+  const s1 = scoreCurrentRatio(currentRatio);
+  const s2 = scoreDE(de);
+  const s3 = scoreMargin(margin);
+  const total = Math.round((s1 + s2 + s3) / 3);
 
-  let tagClass, tagLabel, msg;
-  if(ccc < good){
-    tagClass = 'tag-live'; tagLabel = 'Tốt';
-    msg = `So với mức tham khảo cho ${ref.label.toLowerCase()} (~${good} ngày), vốn của bạn quay vòng nhanh hơn phần lớn doanh nghiệp cùng ngành.`;
-  } else if(ccc < normal){
-    tagClass = 'tag-live'; tagLabel = 'Ổn';
-    msg = `Ở mức bình thường cho ${ref.label.toLowerCase()} — vẫn còn dư địa để rút ngắn trước khi thành áp lực thật sự.`;
-  } else if(ccc < watch){
-    tagClass = 'tag-soon'; tagLabel = 'Cần chú ý';
-    msg = `Cao hơn mức tham khảo của ${ref.label.toLowerCase()} — nếu doanh thu tăng tiếp, áp lực vốn lưu động sẽ tăng nhanh hơn lợi nhuận.`;
-  } else {
-    tagClass = 'tag-soon'; tagLabel = 'Áp lực cao';
-    msg = `Vượt xa mức tham khảo của ${ref.label.toLowerCase()} (~${watch} ngày) — doanh nghiệp đang tự tài trợ cho khách hàng và nhà cung cấp bằng vốn của chính mình.`;
-  }
+  document.getElementById('mainNum').textContent = total;
+  document.getElementById('mainUnit').textContent = '/ 100 · Financial Health Score';
 
-  document.getElementById('verdictText').innerHTML =
-    `<span class="tag ${tagClass}">${tagLabel}</span>${msg}`;
+  let grade, tagClass, msg;
+  if(total >= 85){ grade='A'; tagClass='tag-live'; msg='Nền tảng tài chính vững — thanh khoản, đòn bẩy và lợi nhuận đều ở vùng an toàn.'; }
+  else if(total >= 70){ grade='B'; tagClass='tag-live'; msg='Sức khoẻ tài chính tốt, còn 1-2 điểm có thể cải thiện thêm.'; }
+  else if(total >= 55){ grade='C'; tagClass='tag-soon'; msg='Ở mức trung bình — nên xem kỹ chỉ số nào đang kéo điểm xuống trong 3 số trên.'; }
+  else if(total >= 40){ grade='D'; tagClass='tag-soon'; msg='Có ít nhất 1 khía cạnh đang ở vùng cảnh báo — cần ưu tiên xử lý trước khi mở rộng quy mô.'; }
+  else { grade='F'; tagClass='tag-soon'; msg='Nhiều khía cạnh cùng ở vùng rủi ro — nên rà soát toàn diện trước khi ra quyết định tài chính lớn.'; }
+
+  document.getElementById('verdictText').innerHTML = `<span class="tag ${tagClass}">Hạng ${grade}</span>${msg}`;
 }
 </script>
 </body>
