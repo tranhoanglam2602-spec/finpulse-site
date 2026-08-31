@@ -192,23 +192,19 @@ section{padding:90px 0;}
 </nav>
 
 <div class="wrap-narrow" style="padding-top:60px;padding-bottom:80px;">
-  <div class="tag tag-soon" style="margin-bottom:20px;">Đang nâng cấp — sắp ra mắt</div>
+  <div class="tag tag-live" style="margin-bottom:20px;">Đang hoạt động</div>
   <h1>Upload báo cáo tài chính.<br>Nhận <em>chẩn đoán CFO</em> trong vài phút.</h1>
   <p class="lede">CFO OS phân tích cash flow, working capital, cơ cấu nợ và biên lợi nhuận từ BCTC của bạn, trả về báo cáo 6 phần: Kết luận, 3 Rủi ro lớn nhất, Chi tiết cho Kế toán trưởng, Hành động cần làm, Lựa chọn chiến lược, và Nhận định CFO.</p>
 
   <div class="card" style="margin-top:30px;">
-    <h2>Đăng ký nhận thông báo ra mắt</h2>
-    <p style="font-size:13.5px;color:var(--text-muted);line-height:1.6;margin:0 0 18px;">Để lại email — bạn sẽ là người đầu tiên biết khi CFO OS mở lại, kèm ưu đãi cho người đăng ký sớm.</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <input type="email" id="waitlistEmail" placeholder="Email của bạn" style="flex:1;min-width:200px;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);font-family:var(--sans);font-size:15px;padding:12px 14px;border-radius:2px;outline:none;">
-      <button class="btn" onclick="handleWaitlist()">Đăng ký</button>
-    </div>
-    <div id="waitlistMsg" style="font-size:13px;color:var(--teal);margin-top:12px;display:none;">Đã ghi nhận — hẹn gặp lại khi CFO OS ra mắt.</div>
+    <h2>Chạy chẩn đoán ngay</h2>
+    <p style="font-size:13.5px;color:var(--text-muted);line-height:1.6;margin:0 0 18px;">Upload BCTC và nhận báo cáo đầy đủ tại đây — chưa cần tài khoản FinPulse riêng.</p>
+    <a href="https://cfo-ai-vn.com" target="_blank" class="btn" style="display:inline-block;text-decoration:none;">Chạy CFO OS →</a>
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <h2 style="font-size:18px;">Trong lúc chờ</h2>
-    <p style="font-size:13.5px;color:var(--text-muted);line-height:1.6;margin:0;">Dùng thử <a href="/tools/" style="color:var(--brass);">5 free tools</a> để tự kiểm tra nhanh từng chỉ số tài chính riêng lẻ — không cần chờ CFO OS ra mắt.</p>
+    <h2 style="font-size:18px;">Trong lúc chờ bản FinPulse riêng</h2>
+    <p style="font-size:13.5px;color:var(--text-muted);line-height:1.6;margin:0;">Dùng thử <a href="/tools/" style="color:var(--brass);">5 free tools</a> để tự kiểm tra nhanh từng chỉ số tài chính riêng lẻ.</p>
   </div>
 </div>
 
@@ -217,22 +213,5 @@ section{padding:90px 0;}
   <span>Sản phẩm phần mềm — không phải dịch vụ tư vấn</span>
 </div>
 
-<script>
-function handleWaitlist(){
-  const email = document.getElementById('waitlistEmail').value.trim();
-  if(!email) return;
-
-  // --- LEAD CAPTURE HOOK ---
-  // Dán webhook n8n/Zapier thật vào đây để đẩy waitlist vào Sheet/CRM.
-  // fetch('https://YOUR-N8N-WEBHOOK-URL', {
-  //   method: 'POST',
-  //   headers: {'Content-Type': 'application/json'},
-  //   body: JSON.stringify({ email, source: 'cfo_os_waitlist' })
-  // });
-
-  document.getElementById('waitlistMsg').style.display = 'block';
-  document.getElementById('waitlistEmail').value = '';
-}
-</script>
 </body>
 </html>

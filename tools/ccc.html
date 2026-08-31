@@ -382,13 +382,13 @@ function handleUnlock(){
     return;
   }
 
-  // --- LEAD CAPTURE HOOK ---
-  // Thay URL bên dưới bằng webhook n8n/Zapier thật để đẩy lead vào Sheet/CRM.
-  // fetch('https://YOUR-N8N-WEBHOOK-URL', {
-  //   method: 'POST',
-  //   headers: {'Content-Type': 'application/json'},
-  //   body: JSON.stringify({ contact, tool: 'ccc_calculator', result: computed })
-  // });
+  // --- LEAD CAPTURE HOOK (Google Sheet qua Apps Script) ---
+  fetch('https://script.google.com/macros/s/AKfycbxaPE5kWR3dNJIi2Q6dbddXR6Vf9fl6LBO6Vw4J5d-YBniifqNVUPhWIkf1ClYEWYK3/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify({ contact, tool: 'ccc_calculator', result: computed })
+  });
 
   renderResult();
   document.getElementById('gate').classList.remove('show');
