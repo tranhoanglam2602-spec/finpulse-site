@@ -190,12 +190,12 @@ section{padding:90px 0;}
   .field:last-child{margin-bottom:0;}
   .field-hint{font-size:12px;color:var(--text-muted);opacity:0.75;margin-top:5px;}
 
-  input[type=number]{
+  input[type=number], input.amount-input{
     width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);
     font-family:var(--mono);font-size:16px;padding:11px 13px;border-radius:2px;outline:none;
     transition:border-color .15s ease;
   }
-  input[type=number]:focus{border-color:var(--brass);}
+  input[type=number]:focus, input.amount-input:focus{border-color:var(--brass);}
   input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
 
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -250,12 +250,12 @@ section{padding:90px 0;}
   <div class="card" id="inputCard">
     <div class="field">
       <label class="field-label">Tiền mặt hiện có</label>
-      <input type="number" id="cash" placeholder="VD: 1500000000">
+      <input type="text" inputmode="numeric" class="amount-input" id="cash" placeholder="VD: 1500000000">
       <div class="field-hint">Đơn vị: VNĐ — bao gồm tiền mặt + tiền gửi ngân hàng có thể rút ngay</div>
     </div>
     <div class="field">
       <label class="field-label">Tốc độ đốt tiền ròng / tháng</label>
-      <input type="number" id="burn" placeholder="VD: 300000000">
+      <input type="text" inputmode="numeric" class="amount-input" id="burn" placeholder="VD: 300000000">
       <div class="field-hint">= Chi ra − Thu vào trung bình mỗi tháng. Nếu dòng tiền dương (thu > chi), nhập 0</div>
     </div>
     <div class="err" id="errMsg">Điền đủ các ô, số phải lớn hơn 0.</div>
@@ -296,9 +296,25 @@ section{padding:90px 0;}
 <script>
 let computed = null;
 
+// --- Thousand-separator formatting cho ô nhập số ---
+function stripCommas(v){ return (v || '').toString().replace(/[^0-9.\-]/g, ''); }
+function formatWithCommas(v){
+  if(v === '' || isNaN(v)) return '';
+  return Number(v).toLocaleString('en-US');
+}
+document.querySelectorAll('input.amount-input').forEach(function(inp){
+  inp.addEventListener('focus', function(){ inp.value = stripCommas(inp.value); });
+  inp.addEventListener('blur', function(){
+    var raw = stripCommas(inp.value);
+    inp.value = raw === '' ? '' : formatWithCommas(raw);
+  });
+});
+function numVal(id){ return parseFloat(stripCommas(document.getElementById(id).value)); }
+
+
 function handleCalc(){
-  const cash = parseFloat(document.getElementById('cash').value);
-  const burn = parseFloat(document.getElementById('burn').value);
+  const cash = numVal('cash');
+  const burn = numVal('burn');
   const errEl = document.getElementById('errMsg');
 
   if(isNaN(cash) || cash <= 0 || isNaN(burn) || burn < 0){

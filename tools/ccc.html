@@ -189,12 +189,12 @@ section{padding:90px 0;}
   .field:last-child{margin-bottom:0;}
   .field-hint{font-size:12px;color:var(--text-muted);opacity:0.75;margin-top:5px;}
 
-  input[type=number]{
+  input[type=number], input.amount-input{
     width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);
     font-family:var(--mono);font-size:16px;padding:11px 13px;border-radius:2px;outline:none;
     transition:border-color .15s ease;
   }
-  input[type=number]:focus{border-color:var(--brass);}
+  input[type=number]:focus, input.amount-input:focus{border-color:var(--brass);}
   input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
 
   select{
@@ -270,26 +270,26 @@ section{padding:90px 0;}
     </div>
     <div class="field">
       <label class="field-label">Giá vốn hàng bán (COGS) — 12 tháng gần nhất</label>
-      <input type="number" id="cogs" placeholder="VD: 12000000000">
+      <input type="text" inputmode="numeric" class="amount-input" id="cogs" placeholder="VD: 12000000000">
       <div class="field-hint">Đơn vị: VNĐ, không cần dấu phẩy</div>
     </div>
     <div class="field">
       <label class="field-label">Doanh thu thuần — 12 tháng gần nhất</label>
-      <input type="number" id="revenue" placeholder="VD: 18000000000">
+      <input type="text" inputmode="numeric" class="amount-input" id="revenue" placeholder="VD: 18000000000">
     </div>
     <div class="grid2">
       <div class="field">
         <label class="field-label">Tồn kho bình quân</label>
-        <input type="number" id="inv" placeholder="VD: 2500000000">
+        <input type="text" inputmode="numeric" class="amount-input" id="inv" placeholder="VD: 2500000000">
       </div>
       <div class="field">
         <label class="field-label">Phải thu bình quân (AR)</label>
-        <input type="number" id="ar" placeholder="VD: 1800000000">
+        <input type="text" inputmode="numeric" class="amount-input" id="ar" placeholder="VD: 1800000000">
       </div>
     </div>
     <div class="field">
       <label class="field-label">Phải trả bình quân (AP)</label>
-      <input type="number" id="ap" placeholder="VD: 1400000000">
+      <input type="text" inputmode="numeric" class="amount-input" id="ap" placeholder="VD: 1400000000">
     </div>
     <div class="err" id="errMsg">Điền đủ 5 ô, số phải lớn hơn 0.</div>
     <button class="btn tool-btn" id="calcBtn" onclick="handleCalc()">Tính chu kỳ chuyển đổi tiền mặt</button>
@@ -336,6 +336,22 @@ section{padding:90px 0;}
 <script>
 let computed = null;
 
+// --- Thousand-separator formatting cho ô nhập số ---
+function stripCommas(v){ return (v || '').toString().replace(/[^0-9.\-]/g, ''); }
+function formatWithCommas(v){
+  if(v === '' || isNaN(v)) return '';
+  return Number(v).toLocaleString('en-US');
+}
+document.querySelectorAll('input.amount-input').forEach(function(inp){
+  inp.addEventListener('focus', function(){ inp.value = stripCommas(inp.value); });
+  inp.addEventListener('blur', function(){
+    var raw = stripCommas(inp.value);
+    inp.value = raw === '' ? '' : formatWithCommas(raw);
+  });
+});
+function numVal(id){ return parseFloat(stripCommas(document.getElementById(id).value)); }
+
+
 const INDUSTRY_THRESHOLDS = {
   retail:       {label:'Bán lẻ tổng hợp',              bands:[20, 40, 70]},
   wholesale:    {label:'Phân phối / Bán buôn',          bands:[30, 60, 90]},
@@ -348,11 +364,11 @@ const INDUSTRY_THRESHOLDS = {
 };
 
 function handleCalc(){
-  const cogs = parseFloat(document.getElementById('cogs').value);
-  const revenue = parseFloat(document.getElementById('revenue').value);
-  const inv = parseFloat(document.getElementById('inv').value);
-  const ar = parseFloat(document.getElementById('ar').value);
-  const ap = parseFloat(document.getElementById('ap').value);
+  const cogs = numVal('cogs');
+  const revenue = numVal('revenue');
+  const inv = numVal('inv');
+  const ar = numVal('ar');
+  const ap = numVal('ap');
 
   const errEl = document.getElementById('errMsg');
   const vals = [cogs, revenue, inv, ar, ap];
