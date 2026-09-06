@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ước Tính Giá Trị Doanh Nghiệp — FinPulse</title>
+<meta name="description" content="Ước tính nhanh giá trị doanh nghiệp theo hệ số ngành (EV/EBITDA) — miễn phí, mất 2 phút.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FinPulse">
+<meta property="og:title" content="Ước Tính Giá Trị Doanh Nghiệp — FinPulse">
+<meta property="og:description" content="Ước tính nhanh giá trị doanh nghiệp theo hệ số ngành (EV/EBITDA) — miễn phí, mất 2 phút.">
+<meta property="og:image" content="https://finpulse.vn/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://finpulse.vn/tools/business-value-estimator.html">
+<meta property="og:locale" content="vi_VN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ước Tính Giá Trị Doanh Nghiệp — FinPulse">
+<meta name="twitter:description" content="Ước tính nhanh giá trị doanh nghiệp theo hệ số ngành (EV/EBITDA) — miễn phí, mất 2 phút.">
+<meta name="twitter:image" content="https://finpulse.vn/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink: #10192B;
+  --ink-2: #16213A;
+  --ink-3: #1D2A47;
+  --paper: #F6F3EA;
+  --brass: #C9A227;
+  --brass-soft: rgba(201,162,39,0.16);
+  --teal: #3E9C82;
+  --amber: #D9A441;
+  --brick: #C1573A;
+  --text: #EDE8DA;
+  --text-muted: #9AA7BE;
+  --hair: rgba(237,232,218,0.12);
+  --serif: 'Noto Serif', Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--text);font-family:var(--sans);}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 500px at 15% -10%, rgba(201,162,39,0.10), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, rgba(62,156,130,0.08), transparent 55%),
+    var(--ink);
+}
+a{color:inherit;}
+
+.nav{
+  max-width:960px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 20px;
+  border-bottom:1px solid var(--hair);
+}
+.nav .brand{
+  font-family:var(--serif);font-size:19px;letter-spacing:0.01em;
+  text-decoration:none;color:var(--text);
+  display:flex;align-items:center;gap:9px;
+}
+.nav .brand::before{content:'◆';color:var(--brass);font-size:13px;}
+.nav .links{display:flex;gap:28px;}
+.nav .links a{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
+  text-decoration:none;color:var(--text-muted);
+  transition:color .15s ease;
+}
+.nav .links a:hover, .nav .links a.active{color:var(--brass);}
+@media (max-width:600px){.nav .links{gap:16px;} .nav .links a{font-size:11px;}}
+
+.wrap-narrow{max-width:640px;margin:0 auto;padding:0 20px;}
+
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--brass);display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--brass);display:inline-block;}
+
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.12;margin:0 0 16px;letter-spacing:-0.01em;}
+h1 em{font-style:italic;color:var(--brass);}
+.lede{font-size:16px;line-height:1.65;color:var(--text-muted);max-width:56ch;}
+
+.card{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;
+  padding:26px;position:relative;margin-bottom:22px;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, var(--brass), transparent 70%);
+}
+.card:not(.show){display:none;}
+#inputCard{display:block;}
+
+.field{margin-bottom:18px;}
+.field-label{font-family:var(--sans);font-weight:600;font-size:13.5px;color:var(--text);margin-bottom:7px;display:block;}
+.field-hint{font-size:12px;color:var(--text-muted);margin-top:5px;font-style:italic;}
+input.amount-input, select.select-input{
+  width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);
+  font-family:var(--sans);font-size:15px;padding:11px 13px;border-radius:2px;outline:none;
+}
+select.select-input{appearance:none;cursor:pointer;}
+input.amount-input:focus, select.select-input:focus{border-color:var(--brass);}
+.err{display:none;color:var(--brick);font-size:12.5px;margin-bottom:10px;}
+
+.btn{
+  display:inline-block;background:var(--brass);color:var(--ink);border:none;
+  font-family:var(--sans);font-weight:600;font-size:15px;padding:13px 22px;
+  border-radius:2px;cursor:pointer;text-decoration:none;letter-spacing:0.01em;
+  transition:filter .15s ease;
+}
+.btn:hover{filter:brightness(1.08);}
+.tool-btn{width:100%;}
+
+.tag{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;display:inline-block;
+}
+.tag-live{background:rgba(62,156,130,0.18);color:var(--teal);}
+.tag-soon{background:rgba(217,164,65,0.18);color:var(--amber);}
+.tag-bad{background:rgba(193,87,58,0.18);color:var(--brick);}
+
+.gate-note{font-size:13.5px;color:var(--text-muted);line-height:1.6;margin:0 0 14px;}
+
+.dial-num{font-family:var(--mono);}
+.dial-num .n{font-size:40px;font-weight:600;line-height:1;color:var(--text);}
+.dial-num .u{font-size:13px;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:6px;display:block;}
+
+.verdict{font-family:var(--serif);font-size:18px;line-height:1.5;margin:22px 0 0;padding-top:20px;border-top:1px solid var(--hair);}
+.verdict .tag{margin-right:10px;vertical-align:middle;}
+
+.cta-box{margin-top:26px;padding-top:22px;border-top:1px solid var(--hair);font-size:13.5px;color:var(--text-muted);line-height:1.6;}
+.cta-box a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(201,162,39,0.4);}
+
+.foot{
+  max-width:960px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--hair);
+  font-size:11.5px;color:var(--text-muted);opacity:0.6;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="brand">FinPulse</a>
+  <div class="links">
+    <a href="/">Trang chủ</a>
+    <a href="/tools/" class="active">Công cụ miễn phí</a>
+    <a href="/cfo-os/">CFO OS</a>
+    <a href="/store/">Store</a>
+  </div>
+</nav>
+
+<div class="wrap-narrow" style="padding-top:50px;padding-bottom:70px;">
+
+  <div class="eyebrow">FinPulse · Free Tool 06/06</div>
+  <h1>Doanh nghiệp bạn <em>đáng giá</em> bao nhiêu?</h1>
+  <p class="lede" style="margin-bottom:30px;">Nhập Doanh thu và EBITDA năm gần nhất, chọn ngành — nhận ngay khoảng giá trị tham khảo theo hệ số thị trường (EV/EBITDA). Miễn phí, không cần đăng ký.</p>
+
+  <div class="card show" id="inputCard">
+    <div class="field">
+      <label class="field-label">Doanh thu năm gần nhất</label>
+      <input type="text" inputmode="numeric" class="amount-input" id="revenue" placeholder="VD: 20000000000">
+      <div class="field-hint">Đơn vị: VNĐ</div>
+    </div>
+    <div class="field">
+      <label class="field-label">EBITDA năm gần nhất</label>
+      <input type="text" inputmode="numeric" class="amount-input" id="ebitda" placeholder="VD: 4000000000">
+      <div class="field-hint">≈ Lợi nhuận trước thuế + Lãi vay + Khấu hao. Chưa chắc thì dùng Lợi nhuận trước thuế.</div>
+    </div>
+    <div class="field">
+      <label class="field-label">Ngành</label>
+      <select class="select-input" id="industry">
+        <option value="retail">Thương mại / Bán lẻ</option>
+        <option value="manufacturing">Sản xuất</option>
+        <option value="service">Dịch vụ</option>
+        <option value="fnb">F&amp;B / Nhà hàng</option>
+        <option value="tech">Công nghệ</option>
+        <option value="other">Khác</option>
+      </select>
+    </div>
+    <div class="err" id="errMsg">Điền đủ Doanh thu và EBITDA, số phải khác 0.</div>
+    <button class="btn tool-btn" id="calcBtn" onclick="handleCalc()">Ước tính giá trị</button>
+    <div class="field-hint" style="margin-top:14px;">Dùng hệ số EV/EBITDA trung bình theo ngành — không tính đến nợ vay ròng hay đặc thù riêng của doanh nghiệp bạn.</div>
+  </div>
+
+  <div class="card" id="gate">
+    <div class="field-label" style="margin-bottom:10px;">Xem kết quả</div>
+    <p class="gate-note">Nhập email hoặc Zalo để nhận kết quả — và nhận thêm 1 công cụ CFO mới mỗi tuần.</p>
+    <div class="field">
+      <input type="text" id="leadContact" placeholder="Email hoặc số Zalo" style="width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);font-family:var(--sans);font-size:15px;padding:11px 13px;border-radius:2px;outline:none;">
+    </div>
+    <button class="btn tool-btn" id="unlockBtn" onclick="handleUnlock()">Xem kết quả</button>
+  </div>
+
+  <div class="card" id="result">
+    <div class="dial-num">
+      <span class="n" id="mainNum">—</span>
+      <span class="u">Khoảng giá trị doanh nghiệp ước tính (VNĐ)</span>
+    </div>
+    <p class="verdict" id="verdictText"></p>
+    <div class="cta-box">
+      Đây là ước tính sơ bộ — chưa tính nợ vay ròng, dòng tiền tương lai, hay đặc thù riêng doanh nghiệp bạn.
+      Muốn định giá chính xác hơn — có chiết khấu dòng tiền (DCF), đối chiếu chéo Multiples, và báo cáo dùng để đàm phán?
+      <br><br>
+      <a href="/store/valuation-template.html">Xem Business Valuation Template →</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <span>FinPulse · finpulse.vn</span>
+  <span>Công cụ tham khảo nhanh — không thay thế thẩm định giá chuyên nghiệp</span>
+</div>
+
+<script>
+let computed = null;
+
+const industryMultiples = {
+  retail:        { low: 3,   mid: 4.5, high: 6   },
+  manufacturing: { low: 3.5, mid: 5,   high: 7   },
+  service:       { low: 4,   mid: 6,   high: 8.5 },
+  fnb:           { low: 2.5, mid: 4,   high: 5.5 },
+  tech:          { low: 5,   mid: 8,   high: 12  },
+  other:         { low: 3,   mid: 5,   high: 7   },
+};
+
+function stripCommas(v){ return (v || '').toString().replace(/[^0-9.\-]/g, ''); }
+function formatWithCommas(v){
+  if(v === '' || isNaN(v)) return '';
+  return Number(v).toLocaleString('en-US');
+}
+document.querySelectorAll('input.amount-input').forEach(function(inp){
+  inp.addEventListener('focus', function(){ inp.value = stripCommas(inp.value); });
+  inp.addEventListener('blur', function(){
+    var raw = stripCommas(inp.value);
+    inp.value = raw === '' ? '' : formatWithCommas(raw);
+  });
+});
+function numVal(id){ return parseFloat(stripCommas(document.getElementById(id).value)); }
+
+function handleCalc(){
+  const revenue = numVal('revenue');
+  const ebitda = numVal('ebitda');
+  const industry = document.getElementById('industry').value;
+  const errEl = document.getElementById('errMsg');
+
+  if(isNaN(revenue) || revenue <= 0 || isNaN(ebitda) || ebitda === 0){
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  computed = { revenue, ebitda, industry };
+  document.getElementById('gate').classList.add('show');
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('gate').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function handleUnlock(){
+  const contact = document.getElementById('leadContact').value.trim();
+  if(!contact){
+    document.getElementById('leadContact').style.borderColor = '#C1573A';
+    return;
+  }
+  fetch('https://script.google.com/macros/s/AKfycbxaPE5kWR3dNJIi2Q6dbddXR6Vf9fl6LBO6Vw4J5d-YBniifqNVUPhWIkf1ClYEWYK3/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify({ contact, tool: 'business_value_estimator', result: computed })
+  });
+
+  renderResult();
+  document.getElementById('gate').classList.remove('show');
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function renderResult(){
+  const { revenue, ebitda, industry } = computed;
+  const mult = industryMultiples[industry];
+
+  if(ebitda <= 0){
+    document.getElementById('mainNum').textContent = 'n/a';
+    document.getElementById('verdictText').innerHTML =
+      '<span class="tag tag-bad">EBITDA âm</span>Hệ số Multiples không áp dụng tốt trong trường hợp này. Cân nhắc định giá theo tài sản ròng hoặc doanh thu thay vì lợi nhuận.';
+    return;
+  }
+
+  const low = ebitda * mult.low;
+  const high = ebitda * mult.high;
+  const margin = (ebitda / revenue) * 100;
+
+  document.getElementById('mainNum').textContent =
+    formatWithCommas(Math.round(low)) + ' — ' + formatWithCommas(Math.round(high));
+
+  let tagClass, tagLabel, msg;
+  if(margin >= 20){
+    tagClass = 'tag-live'; tagLabel = 'Biên tốt';
+    msg = `Biên EBITDA ${margin.toFixed(1)}% — cao hơn mặt bằng chung, thường là yếu tố tích cực khi đàm phán giá trị doanh nghiệp.`;
+  } else if(margin >= 10){
+    tagClass = 'tag-live'; tagLabel = 'Trung bình ngành';
+    msg = `Biên EBITDA ${margin.toFixed(1)}% — ở mức trung bình, khoảng giá trị trên phản ánh hệ số phổ biến cho quy mô này.`;
+  } else {
+    tagClass = 'tag-soon'; tagLabel = 'Biên mỏng';
+    msg = `Biên EBITDA ${margin.toFixed(1)}% — khá mỏng, người mua có thể thương lượng về phía thấp của khoảng giá trị.`;
+  }
+  document.getElementById('verdictText').innerHTML = `<span class="tag ${tagClass}">${tagLabel}</span>${msg}`;
+}
+</script>
+</body>
+</html>
