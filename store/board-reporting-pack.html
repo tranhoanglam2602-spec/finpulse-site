@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Reporting Pack — FinPulse</title>
+<meta name="description" content="Chuẩn hoá báo cáo định kỳ cho Hội đồng Quản trị — Excel 6 tab + PowerPoint 9 slide + 5 AI Prompt tặng kèm tự điền số liệu. 199.000đ.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FinPulse">
+<meta property="og:title" content="Board Reporting Pack — FinPulse">
+<meta property="og:description" content="Chuẩn hoá báo cáo định kỳ cho Hội đồng Quản trị — Excel 6 tab + PowerPoint 9 slide + 5 AI Prompt tặng kèm tự điền số liệu. 199.000đ.">
+<meta property="og:image" content="https://finpulse.vn/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://finpulse.vn/store/board-reporting-pack.html">
+<meta property="og:locale" content="vi_VN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Board Reporting Pack — FinPulse">
+<meta name="twitter:description" content="Chuẩn hoá báo cáo định kỳ cho Hội đồng Quản trị — Excel 6 tab + PowerPoint 9 slide + 5 AI Prompt tặng kèm tự điền số liệu. 199.000đ.">
+<meta name="twitter:image" content="https://finpulse.vn/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink: #10192B;
+  --ink-2: #16213A;
+  --ink-3: #1D2A47;
+  --paper: #F6F3EA;
+  --brass: #C9A227;
+  --brass-soft: rgba(201,162,39,0.16);
+  --teal: #3E9C82;
+  --amber: #D9A441;
+  --brick: #C1573A;
+  --text: #EDE8DA;
+  --text-muted: #9AA7BE;
+  --hair: rgba(237,232,218,0.12);
+  --serif: 'Noto Serif', Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--text);font-family:var(--sans);}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 500px at 15% -10%, rgba(201,162,39,0.10), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, rgba(62,156,130,0.08), transparent 55%),
+    var(--ink);
+}
+a{color:inherit;}
+
+/* --- nav --- */
+.nav{
+  max-width:960px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 20px;
+  border-bottom:1px solid var(--hair);
+}
+.nav .brand{
+  font-family:var(--serif);font-size:19px;letter-spacing:0.01em;
+  text-decoration:none;color:var(--text);
+  display:flex;align-items:center;gap:9px;
+}
+.nav .brand::before{
+  content:'◆';color:var(--brass);font-size:13px;
+}
+.nav .links{display:flex;gap:28px;}
+.nav .links a{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
+  text-decoration:none;color:var(--text-muted);
+  transition:color .15s ease;
+}
+.nav .links a:hover, .nav .links a.active{color:var(--brass);}
+@media (max-width:600px){.nav .links{gap:16px;} .nav .links a{font-size:11px;}}
+
+/* --- shared layout --- */
+.wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+.wrap-narrow{max-width:640px;margin:0 auto;padding:0 20px;}
+
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--brass);display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--brass);display:inline-block;}
+
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.12;margin:0 0 16px;letter-spacing:-0.01em;}
+h1 em{font-style:italic;color:var(--brass);}
+.lede{font-size:16px;line-height:1.65;color:var(--text-muted);max-width:56ch;}
+
+.card{
+  background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;
+  padding:26px;position:relative;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, var(--brass), transparent 70%);
+}
+
+.btn{
+  display:inline-block;background:var(--brass);color:var(--ink);border:none;
+  font-family:var(--sans);font-weight:600;font-size:15px;padding:13px 22px;
+  border-radius:2px;cursor:pointer;text-decoration:none;letter-spacing:0.01em;
+  transition:filter .15s ease;
+}
+.btn:hover{filter:brightness(1.08);}
+
+.tag{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;display:inline-block;
+}
+.tag-live{background:rgba(62,156,130,0.18);color:var(--teal);}
+.tag-bonus{background:var(--brass-soft);color:var(--brass);}
+
+.foot{
+  max-width:960px;margin:60px auto 0;padding:24px 20px;border-top:1px solid var(--hair);
+  font-size:11.5px;color:var(--text-muted);opacity:0.6;font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+
+/* --- compare strip --- */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media (max-width:700px){.compare-grid{grid-template-columns:1fr;}}
+.compare-card{background:var(--ink-2);border:1px solid var(--hair);border-radius:2px;padding:18px 20px;}
+.compare-card .c-name{font-family:var(--serif);font-size:15px;color:var(--text);margin-bottom:6px;}
+.compare-card .c-desc{font-size:12.5px;color:var(--text-muted);line-height:1.6;}
+.compare-card.this{border-color:var(--brass);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="brand">FinPulse</a>
+  <div class="links">
+    <a href="/">Trang chủ</a>
+    <a href="/tools/">Công cụ miễn phí</a>
+    <a href="/cfo-os/">CFO OS</a>
+    <a href="/store/" class="active">Store</a>
+  </div>
+</nav>
+
+<div class="wrap-narrow" style="padding-top:50px;padding-bottom:20px;">
+  <div class="eyebrow">Store · CFO &amp; Financial Health</div>
+  <h1>Board <em>Reporting</em> Pack.</h1>
+  <p class="lede">Chuẩn hoá báo cáo tài chính định kỳ trình Hội đồng Quản trị — không phải chẩn đoán nội bộ, không phải mô hình tài chính, mà là lớp trình bày ra bên ngoài: nhập số, ra ngay bộ Excel + slide sẵn dùng.</p>
+</div>
+
+<div class="wrap-narrow" style="padding-bottom:36px;">
+  <div class="compare-grid">
+    <div class="compare-card">
+      <div class="c-name">CFO OS</div>
+      <div class="c-desc">Chẩn đoán sức khỏe tài chính, dùng nội bộ CFO/Kế toán trưởng.</div>
+    </div>
+    <div class="compare-card">
+      <div class="c-name">Financial Model Template</div>
+      <div class="c-desc">Xây mô hình 3 báo cáo tài chính 5 năm, phục vụ kế hoạch/vay vốn.</div>
+    </div>
+    <div class="compare-card this">
+      <div class="c-name">Board Reporting Pack</div>
+      <div class="c-desc">Trình bày kết quả kỳ này ra bên ngoài — trình HĐQT / Nhà đầu tư.</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap-narrow" style="padding-bottom:40px;">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <span class="tag tag-live">Đang bán</span>
+      <span class="tag tag-bonus">+ 5 AI Prompt tặng kèm</span>
+    </div>
+    <div style="font-family:var(--serif);font-size:40px;color:var(--brass);margin-bottom:6px;">199.000đ</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">Thanh toán 1 lần · Dùng vĩnh viễn · Cập nhật mỗi kỳ báo cáo</div>
+
+    <div style="border-top:1px solid var(--hair);padding-top:20px;">
+      <div style="font-family:var(--serif);font-size:16px;margin-bottom:12px;">Bao gồm</div>
+      <div style="font-size:14px;color:var(--text-muted);line-height:2.1;">
+        ✓ Excel 6 tab: Input · Dashboard (11 chỉ số + trạng thái An toàn/Cần theo dõi/Rủi ro) · Risk Register · Board Summary · AI Prompts<br>
+        ✓ PowerPoint 9 slide theo đúng chuẩn trình HĐQT — Kết luận điều hành, P&amp;L, Thanh khoản, Nợ vay, Bảng điểm KPI, Rủi ro, Hành động cần phê duyệt<br>
+        ✓ <strong style="color:var(--text);">Tặng kèm 5 AI Prompt đã kiểm thử</strong> — tự động điền đúng số liệu thật của công ty bạn (không phải prompt chép sẵn chung chung), dùng với Claude/ChatGPT để viết narrative cho từng phần báo cáo<br>
+        ✓ PDF hướng dẫn sử dụng đầy đủ, kèm bảng mapping Excel → từng slide PowerPoint
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--hair);margin-top:20px;padding-top:20px;">
+      <div style="font-family:var(--serif);font-size:16px;margin-bottom:8px;">Không bao gồm</div>
+      <div style="font-size:13.5px;color:var(--text-muted);line-height:1.7;">
+        Số liệu và nhận định trong file mang tính tổng hợp/tham khảo nội bộ, không thay thế đánh giá chuyên môn của kế toán trưởng, kiểm toán độc lập hoặc tư vấn tài chính.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER FORM -->
+<div class="wrap-narrow" style="padding-bottom:90px;" id="order">
+  <div class="card">
+    <div style="font-family:var(--serif);font-size:19px;margin-bottom:8px;">Đặt mua</div>
+    <p style="font-size:13.5px;color:var(--text-muted);line-height:1.6;margin:0 0 18px;">Điền thông tin bên dưới — sau đó bạn sẽ thấy hướng dẫn chuyển khoản. File được gửi qua email/Zalo trong vòng 24h sau khi xác nhận thanh toán.</p>
+
+    <div id="orderStep1">
+      <input type="text" id="orderContact" placeholder="Email hoặc số Zalo" style="width:100%;background:var(--ink-3);border:1px solid var(--hair);color:var(--text);font-family:var(--sans);font-size:15px;padding:11px 13px;border-radius:2px;outline:none;margin-bottom:12px;">
+      <button class="btn" style="width:100%;" onclick="handleOrder()">Đặt mua — 199.000đ</button>
+      <p style="font-size:11.5px;color:var(--text-muted);margin-top:10px;margin-bottom:0;">Bấm "Đặt mua" không phải là thanh toán — bạn sẽ thấy thông tin chuyển khoản ở bước tiếp theo.</p>
+    </div>
+
+    <div id="orderStep2" style="display:none;">
+      <div class="tag tag-live" style="margin-bottom:14px;">Đã ghi nhận đơn</div>
+      <p style="font-size:14px;color:var(--text);line-height:1.7;">Chuyển khoản theo thông tin bên dưới, nội dung chuyển khoản ghi đúng email/Zalo bạn vừa nhập để đối chiếu nhanh hơn:</p>
+      <div style="background:var(--ink-3);border:1px solid var(--hair);border-radius:2px;padding:16px 18px;font-family:var(--mono);font-size:13.5px;line-height:2;margin:14px 0;">
+        Ngân hàng: BIDV<br>
+        Số tài khoản: 5660464442<br>
+        Chủ tài khoản: Tran Hoang Diem<br>
+        Số tiền: 199.000đ<br>
+        Nội dung CK: BOARDPACK <span id="ckContact"></span>
+      </div>
+      <p style="font-size:13.5px;color:var(--text-muted);line-height:1.6;">Sau khi chuyển khoản, nhắn Zalo <strong style="color:var(--text);">+84 935 845 009</strong> kèm ảnh chụp giao dịch để nhận file sớm nhất — chậm nhất trong 24h.</p>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <span>FinPulse · finpulse.vn</span>
+  <span>Board Reporting Pack — Category 1: CFO &amp; Financial Health</span>
+</div>
+
+<script>
+function handleOrder(){
+  const contact = document.getElementById('orderContact').value.trim();
+  if(!contact){
+    document.getElementById('orderContact').style.borderColor = '#C1573A';
+    return;
+  }
+
+  fetch('https://script.google.com/macros/s/AKfycbxaPE5kWR3dNJIi2Q6dbddXR6Vf9fl6LBO6Vw4J5d-YBniifqNVUPhWIkf1ClYEWYK3/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify({ contact, tool: 'board_reporting_pack_order', result: { product: 'Board Reporting Pack', price: '199.000đ', currency: 'VND' } })
+  });
+
+  document.getElementById('ckContact').textContent = contact;
+  document.getElementById('orderStep1').style.display = 'none';
+  document.getElementById('orderStep2').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
